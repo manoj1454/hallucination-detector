@@ -1,0 +1,19 @@
+# Hallucination Detector - project dependencies
+# Generated from imports in ml-service/*.py
+
+# API server
+fastapi==0.136.1
+uvicorn==0.46.0
+python-multipart==0.0.29
+pydantic==2.13.4
+
+# LLM & config
+groq==1.2.0
+python-dotenv==1.2.2
+
+# Document extraction (import fitz)
+PyMuPDF==1.27.2.3
+
+# RAG / knowledge base
+chromadb==1.5.9
+datasets==4.8.5
