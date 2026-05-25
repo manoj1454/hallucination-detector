@@ -2,11 +2,11 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import axios from 'axios';
 import './App.css';
 
-const API_BASE = 'https://hallucination-detector-backend.onrender.com/api';
-const DETECT_TEXT_URL = `${API_BASE}/detect/text`;
-const ML_FILE_URL =
-  'https://manoj1454-hallucination-detector-ml.hf.space/detect/file';
-const HEALTH_URL = `${API_BASE}/health`;
+const SPRING_API_BASE = 'https://hallucination-detector-backend.onrender.com/api';
+const ML_API_BASE = 'https://manoj1454-hallucination-detector-ml.hf.space';
+const HEALTH_URL = `${SPRING_API_BASE}/health`;
+const DETECT_TEXT_URL = `${SPRING_API_BASE}/detect/text`;
+const ML_FILE_URL = `${ML_API_BASE}/detect/file`;
 const GITHUB_URL = 'https://github.com';
 
 const TRUSTWORTHY_VERDICTS = ['TRUSTWORTHY', 'MOSTLY ACCURATE'];
@@ -227,10 +227,14 @@ function App() {
   useEffect(() => {
     const checkHealth = async () => {
       try {
-        await axios.get(HEALTH_URL, { timeout: 5000 });
+        await axios.get(HEALTH_URL, {
+          timeout: 10000,
+          validateStatus: () => true,
+        });
         setApiOnline(true);
-      } catch {
-        setApiOnline(false);
+      } catch (err) {
+        // Server responded but axios still failed (e.g. CORS) — treat as reachable
+        setApiOnline(Boolean(err.response));
       }
     };
     checkHealth();
