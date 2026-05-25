@@ -15,7 +15,10 @@ import com.hallucination.detector.service.PythonMlClient;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {
+    "http://localhost:3000",
+    "https://hallucination-detector-three.vercel.app"
+})
 public class HallucinationController {
 
 	private final PythonMlClient pythonMlClient;
