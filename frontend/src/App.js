@@ -2,9 +2,11 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import axios from 'axios';
 import './App.css';
 
-const API_BASE = 'http://localhost:8080/api';
+const API_BASE = 'https://hallucination-detector-backend.onrender.com/api';
 const DETECT_TEXT_URL = `${API_BASE}/detect/text`;
-const ML_FILE_URL = 'http://localhost:8000/detect/file';
+const ML_FILE_URL =
+  'https://manoj1454-hallucination-detector-ml.hf.space/detect/file';
+const HEALTH_URL = `${API_BASE}/health`;
 const GITHUB_URL = 'https://github.com';
 
 const TRUSTWORTHY_VERDICTS = ['TRUSTWORTHY', 'MOSTLY ACCURATE'];
@@ -225,7 +227,7 @@ function App() {
   useEffect(() => {
     const checkHealth = async () => {
       try {
-        await axios.get('http://localhost:8080/api/health', { timeout: 5000 });
+        await axios.get(HEALTH_URL, { timeout: 5000 });
         setApiOnline(true);
       } catch {
         setApiOnline(false);
