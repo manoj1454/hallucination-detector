@@ -99,7 +99,3 @@ Add these to `.gitignore` if you use Git:
 | Wrong working directory | Run `uvicorn` from `ml-service`, not the project root |
 | Module not found | Activate `venv` and `pip install -r requirements.txt` from project root |
 
-## Related documents
-
-- `SRS_Hallucination_Detection.pdf` — Software requirements specification
-- `ABSTRACT1.pdf` — Project abstract
