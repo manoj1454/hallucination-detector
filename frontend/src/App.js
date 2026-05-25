@@ -225,19 +225,40 @@ function App() {
   }, []);
 
   useEffect(() => {
+    let cancelled = false;
+    const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+    const MAX_ATTEMPTS = 3;
+    const RETRY_DELAY_MS = 5000;
+
     const checkHealth = async () => {
-      try {
-        await axios.get(HEALTH_URL, {
-          timeout: 10000,
-          validateStatus: () => true,
-        });
-        setApiOnline(true);
-      } catch (err) {
-        // Server responded but axios still failed (e.g. CORS) — treat as reachable
-        setApiOnline(Boolean(err.response));
+      for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+        if (cancelled) return;
+
+        try {
+          await axios.get(HEALTH_URL, {
+            timeout: 10000,
+            validateStatus: () => true,
+          });
+          if (!cancelled) setApiOnline(true);
+          return;
+        } catch (err) {
+          if (err.response) {
+            if (!cancelled) setApiOnline(true);
+            return;
+          }
+          if (attempt < MAX_ATTEMPTS) {
+            await sleep(RETRY_DELAY_MS);
+          }
+        }
       }
+
+      if (!cancelled) setApiOnline(false);
     };
+
     checkHealth();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   useEffect(() => {
@@ -306,7 +327,7 @@ function App() {
           ? 'Request timed out. Analysis can take a few minutes.'
           : null) ||
         (err.request
-          ? 'Cannot reach the API. Ensure Spring Boot is running on port 8080 and the Python ML service on port 8000.'
+          ? 'Cannot reach the API. Please wait a moment and try again. The service may be waking up.'
           : err.message);
 
       setError(message);
