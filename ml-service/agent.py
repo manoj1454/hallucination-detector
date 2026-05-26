@@ -183,7 +183,9 @@ def verify_claim(claim: str) -> dict:
     MEDICAL KNOWLEDGE FROM {source_used.upper()}:
     {context}
     
-    Based on the provided medical knowledge, verify this claim.
+    Using your medical knowledge AND the provided sources, verify this claim.
+    Prioritize the provided sources, but also use your general medical 
+    knowledge to catch obvious errors.
     
     Respond ONLY in this exact JSON format:
     {{
