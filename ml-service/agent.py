@@ -26,19 +26,22 @@ def extract_claims(llm_response: str) -> list[str]:
         text = text[:MAX_CLAIM_EXTRACTION_LENGTH]
 
     prompt = f"""
-    You are a medical fact-checker. 
-    Break down the following medical text into individual factual claims.
-    Each claim should be one specific checkable medical statement.
-    
-    TEXT: {text}
-    
-    Respond ONLY with a JSON array of claims like this:
-    ["claim 1", "claim 2", "claim 3"]
-    
-    Do not include opinions or vague statements.
-    Only include specific checkable medical facts.
-    """
+    You are a medical fact-checker.
+    Extract the EXACT specific claims from the text.
+    Do NOT rephrase, generalize, or break into sub-facts.
+    Extract claims EXACTLY as stated by the author.
 
+    TEXT: {text}
+
+    For example:
+    Input: "The nucleus is the powerhouse of the cell"
+    Output: ["The nucleus is the powerhouse of the cell"]
+
+    NOT: ["The nucleus is part of a cell", "The nucleus produces energy"]
+
+    Respond ONLY with a JSON array:
+    ["exact claim 1", "exact claim 2"]
+    """
     response = client.chat.completions.create(
         model=os.getenv("GROQ_MODEL"),
         messages=[{"role": "user", "content": prompt}],
