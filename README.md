@@ -17,7 +17,7 @@ MINI project/
 │   ├── rag_pipeline.py       # ChromaDB + MedQuAD indexing and retrieval
 │   ├── extractor.py          # PDF / image / text extraction
 │   └── medical_db/           # Persisted vector DB (generated on first run)
-└── frontend/                 # (not built yet) React UI
+└── frontend/                
 ```
 
 ## Prerequisites
